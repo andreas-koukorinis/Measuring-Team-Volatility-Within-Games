@@ -1,5 +1,5 @@
 """
-Scrapes basketball play-by-play information and stores it in SQLite.
+Scrapes basketball play-by-play information using Python and stores it in SQLite.
 Author: Andyn Martens
 Date: August 29, 2014
 """
