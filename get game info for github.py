@@ -133,10 +133,9 @@ def tags_from_schedule(sched_and_scores_url):
     return soup_object.tbody.find_all("tr", class_="")
     
 
-#this creates the data to store in sqlite, i.e., each line is a play withe new score
 def pbp_list_for_sql(games):
     """Helper function for scrape_pbp_lists. Takes the list of game objects and 
-    returns many new lists for each game object. Each new list containing a 
+    returns many new lists for each game object. Each new list contains a 
     within-game score with accompanying game info. Use this to insert into 
     SQLite, so each row will represent a moment/play within one game."""
     list_pbps = []  
