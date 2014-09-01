@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-Python code that gets basketball play-by-play information stored in SQLite.
-Then uses the within-game play-by-play info to calculate several metrics  
-that assess a team's potential.
+Python code that gets basketball play-by-play (pbp) info previously scraped and 
+stored in SQLite database. The code then takes the within-game pbp info and 
+calculates several metrics that reflect a team's peak perfomrance in each game.
 
 Author: Andy Martens
 Date: August 29, 2014
 """
 
+# import modules:
 import numpy as np
 import sqlite3
 import pandas as pd
@@ -41,8 +42,10 @@ list_of_teams = ['BOS2014', 'NYK2014', 'BRK2014', 'PHI2014', 'TOR2014', 'MIL2014
 'HOU2007', 'DAL2007', 'NOK2007']
 
 #################################################################
-# Gets play-by-play data from sqlite and condenses into 1 line per game
-# with 'potential' metrics. Then gets into a pandas df.
+# Gets play-by-play data from SQLite and condenses into one line per game
+# with 'peak performance' metrics. The code then puts this data into a 
+# pandas dataframe (df).
+
 
 def create_empty_df():
     """Helper funcdtion for pbp_df. Creates an empty dataframe in pandas"""
@@ -58,11 +61,11 @@ def create_empty_df():
 
 def games_w_max_metric(small_list):
     """Helper function for pbb_df. Takes the list of games that contains a 
-    list of the score difference at each play during each game. The function  
-    computes metrics to assess a teams potential. It selects the maximum 
-    score difference during each game, the minium score difference in each 
-    game, and several measures of the standard deviation of score differences 
-    in each game."""
+    list of the score difference at each play during each game. Computes 
+    metrics to assess a peak performance within each game. It selects the 
+    maximum score difference during each game, the minium score difference 
+    in each game, and several measures of the standard deviation of score 
+    differences in each game."""
     small_list2 = small_list[1:]
     last_list = []        
     for line in small_list2:
@@ -97,7 +100,7 @@ def games_w_max_metric(small_list):
         
 
 def games_w_diffs_list(team_data_from_db):
-    """Helper function for pbb_df. Puts the info from sqlite into a list where 
+    """Helper function for pbb_df. Puts the info from SQLite into a list where 
     each line is an individual game and the final element is a list of the 
     score differences for each play in the game."""    
     small_list = []
@@ -136,7 +139,9 @@ def pbps_from_sql(team):
 def pbp_df(list_of_teams):  
     """Produces a pandas dataframe that contains basic info for each game
     along with the maximum number of points that the team was ahead by 
-    during each game"""
+    during each game, the maximum number of points that the team was losing
+    by, and metrics calculating the standard deviation of score differences
+    within each game."""
     pbp_df = create_empty_df()
     for team in list_of_teams:
         teamdata = pbps_from_sql(team)
@@ -149,4 +154,6 @@ def pbp_df(list_of_teams):
     return pbp_df
 
 
+# Main function that returns a pandas dataframe with information about each game,
+# including metrics that index each team's peak performance in that game.
 final_df = pbp_df(list_of_teams)
