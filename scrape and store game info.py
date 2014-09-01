@@ -1,5 +1,5 @@
 """
-Scrapes basketball play-by-play information using Python and stores it in SQLite.
+Scrapes basketball play-by-play (pbp) information using Python and stores it in SQLite database.
 Author: Andyn Martens
 Date: August 29, 2014
 """
@@ -12,7 +12,7 @@ import sqlite3
 
 
 class Game(object):
-    ''' Object that stores information about a basketball game'''
+    """Object that stores information about a basketball game."""
     def __init__(self, date, team, opponent, home_away, team_score, opponent_score, pbp_scores_list):
         self.date = date
         self.team = team
@@ -74,7 +74,7 @@ def opponent_score(tag):
 
 def get_list_of_scores(pbp_tags):
     """Helper function for list_of_pbp_scores in one game. 
-    Returns list of play-by-play scores in the game."""    
+    Returns list of pbp scores in the game."""    
     scores = []
     for tag in pbp_tags:
         tag_string = tag.string        
@@ -84,7 +84,7 @@ def get_list_of_scores(pbp_tags):
 
 def get_pbp_link(tag):    
     """Helper function for list_of_pbp_scores in one game. 
-    Returns play-by-play link for the game."""        
+    Returns pbp link for the game."""        
     tag_str = str(tag)    
     start_location = tag_str.rfind("/boxscores/") + 11
     end_location = tag_str.rfind(">Box Score<") - 1
@@ -94,7 +94,7 @@ def get_pbp_link(tag):
     
     
 def list_of_pbp_scores(tag): 
-    """Returns list of play-by-play scores in the game."""    
+    """Returns list of pbp scores in the game."""    
     pbp_link = get_pbp_link(tag)    
     on_webpage = urllib.request.urlopen(pbp_link)
     html_doc = on_webpage.read()
@@ -107,7 +107,7 @@ def list_of_pbp_scores(tag):
 
 def game_obj_list(tags, sched_and_scores_url):
     """Returns list of game objects; i.e., returns one object for each 
-    game (that contains basic game info and a list of the play-by-play scores"""    
+    game that contains basic game info and a list of the scores at each play within that game."""    
     game_list = []
     for tag in tags:
         the_date = date_of_game(tag)
@@ -125,7 +125,7 @@ def game_obj_list(tags, sched_and_scores_url):
 
 def tags_from_schedule(sched_and_scores_url):
     """Helper function for scrape_pbp_lists. 
-    Returns tags from webpages that contain play-by-play information"""
+    Returns tags from webpages that contain pbp info."""
     contents = urllib.request.urlopen(sched_and_scores_url)
     html_contents = contents.read()
     soup_object = BeautifulSoup(html_contents)
@@ -134,10 +134,10 @@ def tags_from_schedule(sched_and_scores_url):
     
 
 def pbp_list_for_sql(games):
-    """Helper function for scrape_pbp_lists. Takes the list of game objects and 
-    returns many new lists for each game object. Each new list contains a 
-    within-game score with accompanying game info. Use this to insert into 
-    SQLite, so each row will represent a moment/play within one game."""
+    """Helper function for scrape_pbp_lists. Rreturns many lists 
+    for each game object. Each list contains a score within that game 
+    and accompanying game info. Use this to insert into SQLite, so 
+    each row will represent a moment/play within one game."""
     list_pbps = []  
     game_number = 0
     for game in games:
@@ -155,15 +155,15 @@ def pbp_list_for_sql(games):
 
   
 def scrape_pbp_lists(sched_and_scores_url):
-    """Takes a team's schedule and scores url and scrapes play-by-play scores
-    so that they can then be stored in SQLite table"""
+    """Takes a team's schedule and scores url and scrapes pbp scores
+    so that they can then be stored in SQLite table."""
     tags = tags_from_schedule(sched_and_scores_url)
     game_objects_list = game_obj_list(tags, sched_and_scores_url)
     return pbp_list_for_sql(game_objects_list)   
     
 
 def scrape_and_store_pbps(sched_and_scores_url, team, year): 
-    """Scrapes and stores the play-by-play scores for each game in SQLite table"""
+    """Scrapes and stores the pbp scores for each game in SQLite table"""
     game_pbp_lists_for_sql = scrape_pbp_lists(sched_and_scores_url)    
     con = sqlite3.connect("bball_pbp.db")
     cur = con.cursor()
@@ -177,9 +177,9 @@ def scrape_and_store_pbps(sched_and_scores_url, team, year):
         cur.execute(insert_syntax, line) 
     con.commit()
 
-
+        
 def loop_through_teams(list_of_teams, year):
-    """Loops through teams in a given year and scrapes and stores play-by-play scores"""
+    """Loops through teams in a given year and scrapes and stores pbp scores"""
     for team in list_of_teams:
         sched_and_scores_url = "http://www.basketball-reference.com/teams/" + team + "/" + str(year) + "_games.html"
         scrape_and_store_pbps(sched_and_scores_url, team, year)
@@ -187,20 +187,14 @@ def loop_through_teams(list_of_teams, year):
 
 """List of teams to use as parameter in the loop_through_teams function. 
 Note, this list will differ from year to year, depending on changes"""
-teams = ['NYK', 'BOS', 'BRK', 'PHI', 'TOR', 'MIL', 'DET', 'CLE', 'CHI', 'IND', 'MIA', 'ATL', 'WAS', 'CHA', 'ORL', 'OKC', 'DEN', 'UTA', 'POR', 'MIN', 'LAC', 'GSW', 'LAL', 'SAC', 'PHO', 'SAS', 'MEM', 'HOU', 'DAL', 'NOH']
+teams = ['NYK', 'BOS', 'BRK', 'PHI', 'TOR', 'MIL', 'DET', 'CLE', 'CHI', 'IND', 'MIA', 
+        'ATL', 'WAS', 'CHA', 'ORL', 'OKC', 'DEN', 'UTA', 'POR', 'MIN', 'LAC', 'GSW', 
+        'LAL', 'SAC', 'PHO', 'SAS', 'MEM', 'HOU', 'DAL', 'NOH']
 
 
 """Loops through all the teams in the 2014 season and stores all the
-play-by-play scores in SQLite"""
+pbp scores in SQLite. To scrape info from another season, provide the 
+year of that season as a parameter and check to makes sure that the 
+teams in the NBA from that year match the list of teams provided above."""
 loop_through_teams(teams, 2014)
 
-
-#cur.execute('SELECT * FROM BOS')
-#cur.fetchone()
-
-
-
-      
-        
-        
-        
