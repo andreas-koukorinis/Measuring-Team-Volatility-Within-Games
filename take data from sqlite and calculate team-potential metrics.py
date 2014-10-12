@@ -2,7 +2,7 @@
 """
 Python code that gets basketball play-by-play (pbp) info previously scraped and 
 stored in SQLite database. The code then takes the within-game pbp info and 
-calculates several metrics that reflect a team's peak perfomrance in each game.
+calculates several metrics that reflect a team's variability in each game.
 
 Author: Andy Martens
 Date: August 29, 2014
