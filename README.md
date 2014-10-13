@@ -8,4 +8,4 @@ The script first scrapes NBA play-by-play data from the web and stores that data
 Anysis of this data shows...
 
 
-![Alt text](index1.png?raw=true "Test Graph")
+
