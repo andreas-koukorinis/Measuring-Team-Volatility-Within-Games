@@ -7,4 +7,5 @@ The script first scrapes NBA play-by-play data from the web and stores that data
 
 Anysis of this data shows...
 
-[a relative link](index1.png)
+
+![Alt text](index1.png?raw=true "Test Graph")
