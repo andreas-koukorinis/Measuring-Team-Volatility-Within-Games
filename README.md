@@ -1,4 +1,4 @@
-Measuring-Team-Potential
+Measuring Within-Game Team Volatility
 ========================
 
 Python 3 code used to measure a basketball team's volatility within each game. We define a team's volatility within a game as the standard deviation of the of point difference at each play (i.e., the standard deviation of point-differences within the game). A volatility within games may be averaged over a series of games to provide an estimate of a team's average volatility. 
