@@ -8,6 +8,7 @@ The script [first](scrape and store game info.py) scrapes NBA play-by-play data 
 Using these data I examined whether a team’s tendency towards volatility within games helps to predict their future performance. By itself, volatility did little to predict how well teams will perform. Rather, the ability of volatility to predict future performance depended on whether a team’s opponent was worse or better than them. In games against a better opponent, more volatile teams perform better than less volatile teams. In games against a worse opponent, more volatile teams perform worse than less volatile teams. Stated differently, volatility appears to provide a benefit to teams when playing superior opponents but has a negative impact when playing inferior opponents. 
 
 The graph below depicts this pattern. 
+
 ![Alt text](VolatilityGraph1.png?raw=true "Performance as a Function of Volatility Tendency and Opponent Superiority")
 
 
